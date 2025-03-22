@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@config "../tailwind.config.ts";
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-white font-inter;
+  }
+}
