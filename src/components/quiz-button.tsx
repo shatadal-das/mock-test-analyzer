@@ -70,25 +70,25 @@ function MathsBtn({ className, iconClr, ...props }: ComponentProps<"button"> & {
   );
 }
 
-function ComputerBtn({ className, ...props }: ComponentProps<"button">) {
+function ComputerBtn({ className, iconClr, ...props }: ComponentProps<"button"> & { iconClr?: string }) {
   return (
     <QuizButton
       text="Computer"
       Icon={Cpu}
       className={twMerge("border-gray-500", className)}
-      textColor="text-gray-500"
+      textColor={iconClr ?? "text-gray-500"}
       {...props}
     />
   );
 }
 
-function ReasoningBtn({ className, ...props }: ComponentProps<"button">) {
+function ReasoningBtn({ className, iconClr, ...props }: ComponentProps<"button"> & { iconClr?: string }) {
   return (
     <QuizButton
       text="Reasoning"
       Icon={Brain}
       className={twMerge("border-gray-500", className)}
-      textColor="text-gray-500"
+      textColor={iconClr ?? "text-gray-500"}
       {...props}
     />
   );
