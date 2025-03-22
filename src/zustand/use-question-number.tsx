@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import createSessionStorage from "../utils/session-storage";
 
 interface QuestionNumberState {
   currentQuestionNumber: number;
@@ -7,24 +9,32 @@ interface QuestionNumberState {
   previousQuestion: () => void;
 }
 
-const useQuestionNumber = create<QuestionNumberState>((set) => ({
-  currentQuestionNumber: 1,
-  setQuestionNumber: (questionNumber: number) =>
-    set({ currentQuestionNumber: questionNumber }),
-  nextQuestion: () =>
-    set((state) => ({
-      currentQuestionNumber:
-        state.currentQuestionNumber + 1 > 75
-          ? 1
-          : state.currentQuestionNumber + 1,
-    })),
-  previousQuestion: () =>
-    set((state) => ({
-      currentQuestionNumber:
-        state.currentQuestionNumber - 1 < 1
-          ? 75
-          : state.currentQuestionNumber - 1,
-    })),
-}));
+const useQuestionNumber = create<QuestionNumberState>()(
+  persist(
+    (set) => ({
+      currentQuestionNumber: 1,
+      setQuestionNumber: (questionNumber: number) =>
+        set({ currentQuestionNumber: questionNumber }),
+      nextQuestion: () =>
+        set((state) => ({
+          currentQuestionNumber:
+            state.currentQuestionNumber + 1 > 75
+              ? 1
+              : state.currentQuestionNumber + 1,
+        })),
+      previousQuestion: () =>
+        set((state) => ({
+          currentQuestionNumber:
+            state.currentQuestionNumber - 1 < 1
+              ? 75
+              : state.currentQuestionNumber - 1,
+        })),
+    }),
+    {
+      name: "questionNumber",
+      storage: createSessionStorage,
+    },
+  ),
+);
 
 export default useQuestionNumber;
