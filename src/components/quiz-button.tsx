@@ -12,7 +12,7 @@ function QuizButton({ text, Icon, className, textColor, ...props }: Props) {
   return (
     <button
       className={twMerge(
-        "flex cursor-pointer items-center gap-2 rounded-md border-[1.5px] px-4 hover:brightness-150",
+        "flex cursor-pointer items-center gap-2 rounded-md border-[1.5px] px-4 py-2 hover:brightness-150",
         className,
       )}
       {...props}

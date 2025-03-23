@@ -9,12 +9,9 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { overallAppreciator, subjectAppreciator } from "../utils/actions";
+import { roundOff } from "../utils/function";
 import type { Subjects } from "../zustand/use-question";
 import useQuestion from "../zustand/use-question";
-
-export function roundOff(num: number) {
-  return Number(num.toFixed(2));
-}
 
 function ResultBox() {
   const { questions } = useQuestion();
