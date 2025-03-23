@@ -12,7 +12,8 @@ import {
 } from "./quiz-button";
 
 function QuestionBox() {
-  const { currentQuestionNumber, nextQuestion, previousQuestion } = useQuestionNumber();
+  const { currentQuestionNumber, nextQuestion, previousQuestion } =
+    useQuestionNumber();
   const { questions, setQuestionStatus } = useQuestion();
   const [hasSubChanged, setHasSubChanged] = useState(false);
   const question = questions[currentQuestionNumber - 1];
@@ -40,11 +41,12 @@ function QuestionBox() {
   ]);
 
   return (
-    <div className="mx-auto grid max-w-[30rem] gap-4 border rounded-md border-gray-700 p-4">
+    <div className="mx-auto grid grid-rows-[auto_1fr_auto] max-w-[30rem] gap-4 rounded-md border border-gray-700 p-4">
       <p className="text-2xl font-medium">Q{question.number}.</p>
 
       <div className="mx-auto grid w-max grid-cols-2 gap-10 p-5">
         <div className="grid w-max gap-6">
+          <p className="text-center text-xl italic opacity-70">Answer</p>
           <CorrectBtn
             onClick={() => {
               setQuestionStatus({
@@ -82,6 +84,7 @@ function QuestionBox() {
           />
         </div>
         <div className="grid gap-6">
+          <p className="text-center text-xl italic opacity-70">Subject</p>
           <MathsBtn
             onClick={() => {
               setHasSubChanged(question.subject !== "maths");
@@ -133,7 +136,7 @@ function QuestionBox() {
           />
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex h-max justify-between">
         <button
           onClick={previousQuestion}
           className="flex cursor-pointer items-center gap-1 rounded-md bg-gray-700 px-3 py-1.5 text-[0.8em] hover:brightness-150"
