@@ -22,16 +22,16 @@ type QuestionStore = {
   getCorrectCount: () => number;
 };
 
-const initialQuestions: Question[] = Array.from({ length: 75 }, (_, index) => ({
+const defaultQuestionsData = Array.from({ length: 75 }, (_, index) => ({
   number: index + 1,
-  performance: "unattempted",
+  performance: "correct",
   isAttempted: false,
-}));
+})) satisfies Question[];
 
 const useQuestion = create<QuestionStore>()(
   persist(
     (set, get) => ({
-      questions: initialQuestions,
+      questions: defaultQuestionsData,
       setQuestionStatus: (arg) => {
         set((state) => ({
           questions: state.questions.map((q) =>
@@ -44,7 +44,7 @@ const useQuestion = create<QuestionStore>()(
           ),
         }));
       },
-      resetQuestions: () => set({ questions: initialQuestions }),
+      resetQuestions: () => set({ questions: defaultQuestionsData }),
       getCorrectCount: () =>
         get().questions.filter((q) => q.performance === "correct").length,
     }),
