@@ -17,13 +17,13 @@ function ResultBox() {
   const { questions } = useQuestion();
 
   const totalCorrect = questions.filter(
-    (q) => q.performance === "correct",
+    (q) => q.performance === "correct" && q.subject,
   ).length;
   const totalIncorrect = questions.filter(
-    (q) => q.performance === "wrong",
+    (q) => q.performance === "wrong" && q.subject,
   ).length;
   const totalUnattempted = questions.filter(
-    (q) => q.performance === "unattempted",
+    (q) => q.performance === "unattempted" && q.subject,
   ).length;
   const accuracy = (totalCorrect * 100) / (totalCorrect + totalIncorrect);
   const marksObtained = totalCorrect * 4 + totalIncorrect * -1;
