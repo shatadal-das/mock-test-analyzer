@@ -7,7 +7,7 @@ function QuestionNumberGrid() {
   const { currentQuestionNumber, currentSection } = useQuestionNumber();
 
   return (
-    <div className="mx-auto grid w-max grid-cols-15 gap-2">
+    <div className="mx-auto grid size-max grid-cols-15 gap-2">
       {Array.from(
         { length: patternPerSection[currentSection].totalQuestions },
         (_, i) => (

@@ -8,10 +8,16 @@ import useShowResult from "./zustand/use-show-result";
 function App() {
   const { showResult } = useShowResult();
   return (
-    <div className="grid h-screen grid-rows-[auto_1fr_auto_auto] gap-3 p-3">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto] gap-8 p-3">
       <TestCodeInput />
-      {showResult ? <ResultBox /> : <QuestionBox />}
-      <QuestionNumberGrid />
+      {showResult ? (
+        <ResultBox />
+      ) : (
+        <div className="grid grid-rows-[auto_1fr] gap-4">
+          <QuestionBox />
+          <QuestionNumberGrid />
+        </div>
+      )}
       <ActionButtons />
     </div>
   );

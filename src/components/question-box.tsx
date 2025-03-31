@@ -7,6 +7,7 @@ import {
   Radical,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 import useQuestion from "../zustand/use-question";
 import useQuestionNumber from "../zustand/use-question-number";
 import { CorrectBtn, UnattemptedBtn, WrongBtn } from "./quiz-button";
@@ -15,6 +16,7 @@ function QuestionBox() {
   const {
     currentQuestionNumber,
     currentSection,
+    changeSection,
     nextQuestion,
     previousQuestion,
   } = useQuestionNumber();
@@ -46,19 +48,31 @@ function QuestionBox() {
     setQuestionStatus,
   ]);
 
+  const sections = [
+    { name: "mathematics", icon: <Radical /> },
+    { name: "logicalReasoning", icon: <Brain /> },
+    { name: "computerScience", icon: <Cpu /> },
+    { name: "generalEnglish", icon: <BookA /> },
+  ] as const;
+
   return (
-    <div className="mx-auto flex max-w-[30rem] flex-col justify-between gap-4 rounded-md border border-gray-700 p-4">
+    <div className="mx-auto flex max-w-[30rem] flex-col h-[20rem] justify-between gap-4 rounded-md border border-gray-700 p-4">
       <div className="flex justify-between">
         <p className="text-2xl font-medium">Q{question.number}.</p>
-        {currentSection === "mathematics" ? (
-          <Radical className="opacity-40" />
-        ) : currentSection === "logicalReasoning" ? (
-          <Brain className="opacity-40" />
-        ) : currentSection === "computerScience" ? (
-          <Cpu className="opacity-40" />
-        ) : (
-          <BookA className="opacity-40" />
-        )}
+        <div className="flex gap-2">
+          {sections.map(({ name, icon }) => (
+            <button
+              key={name}
+              className={twMerge(
+                "cursor-pointer p-2 transition-opacity hover:bg-gray-800 rounded-md",
+                currentSection === name ? "opacity-100" : "opacity-40",
+              )}
+              onClick={() => changeSection(name)}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex w-max gap-6">

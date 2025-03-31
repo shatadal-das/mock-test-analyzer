@@ -4,10 +4,10 @@ import patternPerSection from "../utils/pattern";
 import createSessionStorage from "../utils/session-storage";
 import type { Subjects } from "./use-question";
 
-
 interface QuestionNumberState {
   currentQuestionNumber: number;
   currentSection: Subjects;
+  changeSection: (section: Subjects) => void;
   setQuestionNumber: (questionNumber: number) => void;
   nextQuestion: () => void;
   previousQuestion: () => void;
@@ -20,6 +20,9 @@ const useQuestionNumber = create<QuestionNumberState>()(
     (set, get) => ({
       currentQuestionNumber: 1,
       currentSection: "mathematics",
+      changeSection: (section: Subjects) => {
+        set({ currentSection: section, currentQuestionNumber: 1 });
+      },
       setQuestionNumber: (questionNumber: number) =>
         set({ currentQuestionNumber: questionNumber }),
       nextQuestion: () =>
