@@ -15,7 +15,7 @@ function ActionButtons() {
           resetTestCode();
           resetQuestions();
         }}
-        className="cursor-pointer rounded-md bg-gray-700 px-4 py-2 hover:brightness-125"
+        className="cursor-pointer rounded-md  bg-gray-700 px-4 py-2 hover:brightness-125"
       >
         Reset
       </button>

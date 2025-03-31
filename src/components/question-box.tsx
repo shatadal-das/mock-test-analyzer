@@ -1,30 +1,37 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  BookA,
+  Brain,
+  ChevronLeft,
+  ChevronRight,
+  Cpu,
+  Radical,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import useQuestion from "../zustand/use-question";
 import useQuestionNumber from "../zustand/use-question-number";
-import {
-  ComputerBtn,
-  CorrectBtn,
-  MathsBtn,
-  ReasoningBtn,
-  UnattemptedBtn,
-  WrongBtn,
-} from "./quiz-button";
+import { CorrectBtn, UnattemptedBtn, WrongBtn } from "./quiz-button";
 
 function QuestionBox() {
-  const { currentQuestionNumber, nextQuestion, previousQuestion } = useQuestionNumber();
+  const {
+    currentQuestionNumber,
+    currentSection,
+    nextQuestion,
+    previousQuestion,
+  } = useQuestionNumber();
   const { questions, setQuestionStatus } = useQuestion();
-  const [hasSubChanged, setHasSubChanged] = useState(false);
-  const question = questions[currentQuestionNumber - 1];
+  const [hasResponded, setHasResponded] = useState(false);
+  const filteredQuestions = questions.filter(
+    (q) => q.subject === currentSection,
+  );
+  const question = filteredQuestions[currentQuestionNumber - 1];
 
   useEffect(() => {
     const abrt = new AbortController();
-    if (question.subject !== undefined && hasSubChanged) {
-      console.log(hasSubChanged);
+    if (hasResponded) {
       setTimeout(
         () => {
           nextQuestion();
-          setHasSubChanged(false);
+          setHasResponded(false);
         },
         500,
         { signal: abrt.signal },
@@ -32,7 +39,7 @@ function QuestionBox() {
     }
     return () => abrt.abort();
   }, [
-    hasSubChanged,
+    hasResponded,
     nextQuestion,
     question.number,
     question.subject,
@@ -40,99 +47,64 @@ function QuestionBox() {
   ]);
 
   return (
-    <div className="mx-auto grid max-w-[30rem] gap-4 border rounded-md border-gray-700 p-4">
-      <p className="text-2xl font-medium">Q{question.number}.</p>
-
-      <div className="mx-auto grid w-max grid-cols-2 gap-10 p-5">
-        <div className="grid w-max gap-6">
-          <CorrectBtn
-            onClick={() => {
-              setQuestionStatus({
-                number: question.number,
-                performance: "correct",
-              });
-            }}
-            className={
-              question.performance === "correct" ? "bg-green-900/40" : undefined
-            }
-          />
-          <WrongBtn
-            onClick={() => {
-              setQuestionStatus({
-                number: question.number,
-                performance: "wrong",
-              });
-            }}
-            className={
-              question.performance === "wrong" ? "bg-red-900/40" : undefined
-            }
-          />
-          <UnattemptedBtn
-            onClick={() => {
-              setQuestionStatus({
-                number: question.number,
-                performance: "unattempted",
-              });
-            }}
-            className={
-              question.performance === "unattempted"
-                ? "bg-orange-400/20"
-                : undefined
-            }
-          />
-        </div>
-        <div className="grid gap-6">
-          <MathsBtn
-            onClick={() => {
-              setHasSubChanged(question.subject !== "maths");
-              setQuestionStatus({
-                number: question.number,
-                subject: "maths",
-              });
-            }}
-            className={
-              question.subject === "maths"
-                ? "border-blue-600 bg-blue-900/40"
-                : undefined
-            }
-            iconClr={question.subject === "maths" ? "text-blue-300" : undefined}
-          />
-          <ComputerBtn
-            onClick={() => {
-              setHasSubChanged(question.subject !== "computer");
-              setQuestionStatus({
-                number: question.number,
-                subject: "computer",
-              });
-            }}
-            className={
-              question.subject === "computer"
-                ? "border-blue-600 bg-blue-900/40"
-                : undefined
-            }
-            iconClr={
-              question.subject === "computer" ? "text-blue-300" : undefined
-            }
-          />
-          <ReasoningBtn
-            onClick={() => {
-              setHasSubChanged(question.subject !== "reasoning");
-              setQuestionStatus({
-                number: question.number,
-                subject: "reasoning",
-              });
-            }}
-            className={
-              question.subject === "reasoning"
-                ? "border-blue-600 bg-blue-900/40"
-                : undefined
-            }
-            iconClr={
-              question.subject === "reasoning" ? "text-blue-300" : undefined
-            }
-          />
-        </div>
+    <div className="mx-auto flex max-w-[30rem] flex-col justify-between gap-4 rounded-md border border-gray-700 p-4">
+      <div className="flex justify-between">
+        <p className="text-2xl font-medium">Q{question.number}.</p>
+        {currentSection === "mathematics" ? (
+          <Radical className="opacity-40" />
+        ) : currentSection === "logicalReasoning" ? (
+          <Brain className="opacity-40" />
+        ) : currentSection === "computerScience" ? (
+          <Cpu className="opacity-40" />
+        ) : (
+          <BookA className="opacity-40" />
+        )}
       </div>
+
+      <div className="flex w-max gap-6">
+        <CorrectBtn
+          onClick={() => {
+            setHasResponded(true);
+            setQuestionStatus({
+              number: question.number,
+              performance: "correct",
+              subject: currentSection,
+            });
+          }}
+          className={
+            question.performance === "correct" ? "bg-green-900/40" : undefined
+          }
+        />
+        <WrongBtn
+          onClick={() => {
+            setHasResponded(true);
+            setQuestionStatus({
+              number: question.number,
+              performance: "wrong",
+              subject: currentSection,
+            });
+          }}
+          className={
+            question.performance === "wrong" ? "bg-red-900/40" : undefined
+          }
+        />
+        <UnattemptedBtn
+          onClick={() => {
+            setHasResponded(true);
+            setQuestionStatus({
+              number: question.number,
+              performance: "unattempted",
+              subject: currentSection,
+            });
+          }}
+          className={
+            question.performance === "unattempted"
+              ? "bg-orange-400/20"
+              : undefined
+          }
+        />
+      </div>
+
       <div className="flex justify-between">
         <button
           onClick={previousQuestion}

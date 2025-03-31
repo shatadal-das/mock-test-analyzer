@@ -1,4 +1,5 @@
 import {
+  BookA,
   Brain,
   CircleCheck,
   CircleX,
@@ -197,12 +198,14 @@ function Box({
     <div className="grid grid-rows-[auto_1fr] space-y-2">
       <div className="relative h-max rounded-md bg-gray-900 p-4">
         <div className="absolute top-2 right-2 size-12 opacity-10">
-          {type === "maths" ? (
+          {type === "mathematics" ? (
             <Radical className="size-full" />
-          ) : type === "computer" ? (
+          ) : type === "computerScience" ? (
             <Cpu className="size-full" />
-          ) : (
+          ) : type === "logicalReasoning" ? (
             <Brain className="size-full" />
+          ) : (
+            <BookA className="size-full" />
           )}
         </div>
 

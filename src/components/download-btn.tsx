@@ -1,8 +1,8 @@
 import { roundOff } from "../utils/function";
-import useQuestion from "../zustand/use-question";
+import patternPerSection from "../utils/pattern";
+import useQuestion, { type Subjects } from "../zustand/use-question";
 import useTestCode from "../zustand/use-test-code";
 
-type Subject = "maths" | "computer" | "reasoning";
 type Performances = "correct" | "wrong" | "unattempted";
 
 function DownloadBtn() {
@@ -10,7 +10,7 @@ function DownloadBtn() {
   const { questions } = useQuestion();
 
   const getQuestionsByPerformance = (
-    subject: Subject,
+    subject: Subjects,
     performance: Performances,
   ) =>
     questions
@@ -18,7 +18,7 @@ function DownloadBtn() {
       .map((q) => q.number)
       .join(", ") || "None";
 
-  const getStats = (subject: Subject) => {
+  const getStats = (subject: Subjects) => {
     const total = questions.filter((q) => q.subject === subject).length;
     const correct = questions.filter(
       (q) => q.subject === subject && q.performance === "correct",
@@ -45,7 +45,19 @@ function DownloadBtn() {
     { total: 0, correct: 0, wrong: 0, unattempted: 0 },
   );
 
-  const marksObtained = totalStats.correct * 4 - totalStats.wrong;
+  const marksObtained = (Object.keys(patternPerSection) as Subjects[]).reduce(
+    (total, subject) => {
+      const stats = getStats(subject);
+      return (
+        total +
+        stats.correct * patternPerSection[subject].marksPerIncorrect +
+        stats.wrong * patternPerSection[subject].marksPerIncorrect
+      );
+    },
+    0,
+  );
+
+  // const marksObtained = totalStats.correct * 4 - totalStats.wrong;
   const overallAccuracy =
     totalStats.correct + totalStats.wrong > 0
       ? roundOff(
@@ -58,44 +70,47 @@ function DownloadBtn() {
 ## 📌 Question Breakdown
 
 ### ✅ Correct Question Numbers
-- **Maths:** ${getQuestionsByPerformance("maths", "correct")}
-- **Computer:** ${getQuestionsByPerformance("computer", "correct")}
-- **Reasoning:** ${getQuestionsByPerformance("reasoning", "correct")}
+- **Maths:** ${getQuestionsByPerformance("mathematics", "correct")}
+- **Reasoning:** ${getQuestionsByPerformance("logicalReasoning", "correct")}
+- **Computer:** ${getQuestionsByPerformance("computerScience", "correct")}
+- **General English:** ${getQuestionsByPerformance("generalEnglish", "correct")}
 
 ### ❌ Incorrect Question Numbers
-- **Maths:** ${getQuestionsByPerformance("maths", "wrong")}
-- **Computer:** ${getQuestionsByPerformance("computer", "wrong")}
-- **Reasoning:** ${getQuestionsByPerformance("reasoning", "wrong")}
+- **Maths:** ${getQuestionsByPerformance("mathematics", "wrong")}
+- **Reasoning:** ${getQuestionsByPerformance("logicalReasoning", "wrong")}
+- **Computer:** ${getQuestionsByPerformance("computerScience", "wrong")}
+- **General English:** ${getQuestionsByPerformance("generalEnglish", "wrong")}
 
 ### ❓ Unattempted Question Numbers
-- **Maths:** ${getQuestionsByPerformance("maths", "unattempted")}
-- **Computer:** ${getQuestionsByPerformance("computer", "unattempted")}
-- **Reasoning:** ${getQuestionsByPerformance("reasoning", "unattempted")}
+- **Maths:** ${getQuestionsByPerformance("mathematics", "unattempted")}
+- **Reasoning:** ${getQuestionsByPerformance("logicalReasoning", "unattempted")}
+- **Computer:** ${getQuestionsByPerformance("computerScience", "unattempted")}
+- **General English:** ${getQuestionsByPerformance("generalEnglish", "unattempted")}
 
 ---
 
 ## 📊 Subject-wise Performance
 
 ### 📘 Maths
-- **Total Questions:** ${getStats("maths").total}
-- **Correct:** ${getStats("maths").correct}
-- **Incorrect:** ${getStats("maths").wrong}
-- **Unattempted:** ${getStats("maths").unattempted}
-- **Accuracy:** ${getStats("maths").accuracy}%
-
-### 💻 Computer
-- **Total Questions:** ${getStats("computer").total}
-- **Correct:** ${getStats("computer").correct}
-- **Incorrect:** ${getStats("computer").wrong}
-- **Unattempted:** ${getStats("computer").unattempted}
-- **Accuracy:** ${getStats("computer").accuracy}%
+- **Total Questions:** ${getStats("mathematics").total}
+- **Correct:** ${getStats("mathematics").correct}
+- **Incorrect:** ${getStats("mathematics").wrong}
+- **Unattempted:** ${getStats("mathematics").unattempted}
+- **Accuracy:** ${getStats("mathematics").accuracy}%
 
 ### 🧠 Reasoning
-- **Total Questions:** ${getStats("reasoning").total}
-- **Correct:** ${getStats("reasoning").correct}
-- **Incorrect:** ${getStats("reasoning").wrong}
-- **Unattempted:** ${getStats("reasoning").unattempted}
-- **Accuracy:** ${getStats("reasoning").accuracy}%
+- **Total Questions:** ${getStats("logicalReasoning").total}
+- **Correct:** ${getStats("logicalReasoning").correct}
+- **Incorrect:** ${getStats("logicalReasoning").wrong}
+- **Unattempted:** ${getStats("logicalReasoning").unattempted}
+- **Accuracy:** ${getStats("logicalReasoning").accuracy}%
+
+### 💻 Computer
+- **Total Questions:** ${getStats("computerScience").total}
+- **Correct:** ${getStats("computerScience").correct}
+- **Incorrect:** ${getStats("computerScience").wrong}
+- **Unattempted:** ${getStats("computerScience").unattempted}
+- **Accuracy:** ${getStats("computerScience").accuracy}%
 
 ---
 
